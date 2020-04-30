@@ -10,7 +10,7 @@
 #define ull unsigned long long
 
 /*PARA COMPILAR
-	g++ -pthreads -std=c++11 tarea1.cpp -o tarea1
+	g++ -pthread -std=c++11 tarea1.cpp -o tarea1
 */
 /*
 	no= creacion nuevo objeto;
