@@ -1,3 +1,8 @@
+/*/////////////////////////////////
+Autor: Jefferson Flores Herrera
+Curso: ADA
+TAREA 1: ANALISIS DE INSERTION AND BUBBLE SORT
+///////////////////////////////////*/
 #include <iostream>
 #include <climits>
 #include <stdlib.h>
@@ -6,7 +11,6 @@
 #include <thread>
 
 #define INF LONG_MAX
-#define ul unsigned long
 #define ull unsigned long long
 
 /*PARA COMPILAR
@@ -18,10 +22,11 @@
 	co= comparacion;
 	arr= alloc on new array;
 */
-void generateArray(long*& array,const ul size);
-void insertionSort(long*& array, const ul size);
-void bubbleSort(long*& array, const ul size);
-ull cantidad_objetos=0, cantidad_comparaciones=0, cantidad_asignaciones=0, cantidad_memoria=0;
+void generateArray(long*& array,const int size);
+void insertionSort(long*& array, const int size);
+void bubbleSort(long*& array, const int size);
+ull cantidad_objetos=0, cantidad_comparaciones=0, cantidad_asignaciones=0, cantidad_memoria=0,
+	cantidad_comparaciones_insert=0, cantidad_comparaciones_bubble=0, cantidad_objetos_insert=0, cantidad_objetos_bubble=0, cantidad_asignaciones_insert=0, cantidad_asignaciones_bubble=0;
 
 int main(){
 	srand (time(NULL));	
@@ -29,7 +34,7 @@ int main(){
 	long* array2 = nullptr;//as,no
 	cantidad_asignaciones+=2;
 	cantidad_objetos+=2;
-	ul size;//no
+	int size;//no
 	cantidad_objetos++;
 	std::cout<<"Ingrese tamano a generar\n";
 	std::cin>>size;//as no estoy seguro de esto
@@ -52,21 +57,22 @@ int main(){
 	delete[] array;
 	delete[] array2;
 	cantidad_objetos*=200;
-	cantidad_asignaciones*=8;
-	cantidad_comparaciones*=2;
+	cantidad_asignaciones*=8 + cantidad_asignaciones_insert + cantidad_asignaciones_bubble;
+	cantidad_comparaciones*=2 + cantidad_comparaciones_insert + cantidad_comparaciones_bubble;
+	std::cout<<"TOTAL\n";
 	std::cout<<"analisis cantidad objetos: "<< cantidad_objetos<<std::endl
 			 <<"analisis cantidad asignaciones: "<< cantidad_asignaciones<<std::endl
 			 <<"analisis cantidad de comparaciones: "<< cantidad_comparaciones<<std::endl
-			 <<"analisis cantidad de asignacion de memoria: "<<cantidad_memoria<<std::endl;
+			 <<"analisis cantidad de asignacion de memoria: "<<cantidad_memoria<<std::endl<<std::endl;
 }
 
-void generateArray(long*& array, const ul size){
+void generateArray(long*& array, const int size){
 	//delete[] array //--si necesitamos hacer constantes pruebas.
 	cantidad_objetos++;//no size
 	cantidad_asignaciones++;//as en argumento size ya que es un nuevo objeto copia
 	array = new long[size]; //arr
 	cantidad_memoria += 50 + size*10;
-	ul i;//no
+	int i;//no
 	cantidad_objetos++;
 	cantidad_asignaciones++;//as para iniciar el for i=0
 	cantidad_comparaciones++;//co para entrar al for
@@ -78,62 +84,67 @@ void generateArray(long*& array, const ul size){
 		cantidad_comparaciones++;//co para seguir en el for
 	}
 }
-void insertionSort( long*& array, const ul size){
+void insertionSort( long*& array, const int size){
 	std::chrono::steady_clock::time_point inicio_ordenamiento_insertion = std::chrono::steady_clock::now();//c++11 time
-	cantidad_objetos++;//no size
-	cantidad_asignaciones++;// as size
-	ul i, j, temp;//no i,j,temp, as en i
-	cantidad_objetos += 3;	
-	cantidad_asignaciones++;//as para iniciar el for i=0
-	cantidad_comparaciones++;//co para entrar al for
-	for(i=0;i< size; ++i){//as,co
-		j =i;//as
-		cantidad_asignaciones++;
-		cantidad_comparaciones+=2;//2 co para entrar al while
-		while(j>0 && array[j] < array[j-1]){
-			temp = array[j];//as
-			cantidad_asignaciones++;
-			array[j]= array[j-1];//as
-			cantidad_asignaciones++;
-			array[j-1] = temp;//as
-			cantidad_asignaciones++;
-			j--;//as j=j-1
-			cantidad_asignaciones++;
-			cantidad_comparaciones += 2;//2 co para ejecutar de neuvo el while
+	cantidad_objetos_insert++;//no size
+	cantidad_asignaciones_insert++;// as size
+	int i, j;//no i,j,temp, as en i
+	long temp;
+	cantidad_objetos_insert += 3;	
+	cantidad_asignaciones_insert++;//as para iniciar el for i=0
+	cantidad_comparaciones_insert++;//co para entrar al for
+	for(i=1;i< size; ++i){//as,co
+		temp = array[i];//as
+		j = i-1;//as
+	cantidad_asignaciones_insert+=2;
+	cantidad_comparaciones_insert+=2;//2 co para entrar al while
+		while(j>=0 && array[j] > temp){
+			array[j+1] = array[j];//as
+		cantidad_asignaciones_insert++;
+			--j;//as j=j-1
+		cantidad_asignaciones_insert++;
+		cantidad_comparaciones_insert += 2;//2 co para ejecutar de neuvo el while
 		}
-		cantidad_asignaciones++;//as para ++i i=i+1
-		cantidad_comparaciones++;//co para continuar en el for
+		array[j+1] = temp;//as
+	cantidad_asignaciones_insert+=2;//as para ++i i=i+1
+	cantidad_comparaciones_insert++;//co para continuar en el for
 	}
+	cantidad_asignaciones_insert*=8;
+	cantidad_comparaciones_insert*=2;
 	std::chrono::steady_clock::time_point fin_ordenamiento_insertion = std::chrono::steady_clock::now();//c++11 time
-	std::cout<<"Tiempo de insert sort: "<< std::chrono::duration_cast<std::chrono::microseconds>(fin_ordenamiento_insertion - inicio_ordenamiento_insertion).count()/1000000.0<<" segundos" <<std::endl;
+	std::cout<<"INSERTION SORT\n";
+	std::cout<<"Tiempo de insert sort: "<< std::chrono::duration_cast<std::chrono::microseconds>(fin_ordenamiento_insertion - inicio_ordenamiento_insertion).count()/1000000.0<<" segundos" <<std::endl<<"Comparaciones realizadas: "<< cantidad_comparaciones_insert<<std::endl<<"Asignaciones realizadas: "<<cantidad_asignaciones_insert<<std::endl<<std::endl;
 }
-void bubbleSort(long*& array, const ul size){
+void bubbleSort(long*& array, const int size){
 	std::chrono::steady_clock::time_point inicio_ordenamiento_bubble = std::chrono::steady_clock::now();//c++11 time
-	cantidad_objetos++;//no size
-	cantidad_asignaciones++;// as size
-	ul i, j;//no
-	cantidad_objetos += 2;
-	cantidad_asignaciones++;//as para iniciar el for i=0
-	cantidad_comparaciones++;//co para entrar al for
+	cantidad_objetos_bubble++;//no size
+	cantidad_asignaciones_bubble++;// as size
+	int i, j;//no
+	cantidad_objetos_bubble += 2;
+	cantidad_asignaciones_bubble++;//as para iniciar el for i=0
+	cantidad_comparaciones_bubble++;//co para entrar al for
 	for(i=0;i< size-1;++i){//as,co
-		cantidad_asignaciones++;//as para iniciar el for j=0
-		cantidad_comparaciones++;//co para entrar al for
+		cantidad_asignaciones_bubble++;//as para iniciar el for j=0
+		cantidad_comparaciones_bubble++;//co para entrar al for
 		for(j=0; j< size-i-1; ++j){
 			if(array[j] > array[j+1]){
-				int temp = array[j];//no,as
-				cantidad_objetos++;
-				cantidad_asignaciones++;
+				long temp = array[j];//no,as
+				cantidad_objetos_bubble++;
+				cantidad_asignaciones_bubble++;
 				array[j] = array[j+1];//as
 				array[j+1] = array[j];//as
-				cantidad_asignaciones+=2;
+				cantidad_asignaciones_bubble+=2;
 			}	
-			cantidad_asignaciones;//as para ++j;
-			cantidad_comparaciones;//co para continuar en el for
+			cantidad_asignaciones_bubble++;//as para ++j;
+			cantidad_comparaciones_bubble++;//co para continuar en el for
 		}
-		cantidad_asignaciones++;//as para ++i
-		cantidad_comparaciones++;//co para continuar en el for
+		cantidad_asignaciones_bubble++;//as para ++i
+		cantidad_comparaciones_bubble++;//co para continuar en el for
 		
 	}
+	cantidad_asignaciones_bubble*=8;
+	cantidad_comparaciones_bubble*=2;
 	std::chrono::steady_clock::time_point fin_ordenamiento_bubble = std::chrono::steady_clock::now();
-	std::cout<<"Tiempo de bubble sort: "<< std::chrono::duration_cast<std::chrono::microseconds>(fin_ordenamiento_bubble - inicio_ordenamiento_bubble).count()/1000000.0<<" segundos" <<std::endl;
+	std::cout<<"BUBBLE SORT\n";
+	std::cout<<"Tiempo de bubble sort: "<< std::chrono::duration_cast<std::chrono::microseconds>(fin_ordenamiento_bubble - inicio_ordenamiento_bubble).count()/1000000.0<<" segundos" <<std::endl<<"Comparaciones realizadas: "<<cantidad_comparaciones_bubble<<std::endl<<"Asignaciones realizadas: "<< cantidad_asignaciones_bubble<<std::endl<<std::endl;
 }
