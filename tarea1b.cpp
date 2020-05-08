@@ -20,11 +20,11 @@ y desordenados 											////
 #define ull unsigned long long
 
 long* generate_array(const int size);
-long* insertion_sort(long*& array, const int size, bool(*compare)(void));
-long* bubble_sort(long*& array, const int size, bool(*compare)(void));
+long* insertion_sort(long*& array, const int size);
+long* bubble_sort(long*& array, const int size);
 void mostrar_array(long* array, const int size);
-bool mayor();
-bool menor();
+bool mayor(long, long);
+bool menor(long, long);
 
 ull	cantidad_comparaciones_insert=0, cantidad_comparaciones_bubble=0, cantidad_objetos_insert=0, cantidad_objetos_bubble=0, cantidad_asignaciones_insert=0, cantidad_asignaciones_bubble=0;
 
@@ -42,23 +42,28 @@ int main(){
 	long* arrayOrdenadoDescendenteInsertion = generate_array(size);
 	long* arrayOrdenadoDescendenteBubble = generate_array(size);
 	
+	//insertion_sort(arrayOrdenadoDescendenteInsertion,size);
+	//insertion_bubb
+
 	if(arrayDesordenadoInsertion && arrayDesordenadoBubble && arrayOrdenadoDescendenteInsertion && arrayOrdenadoDescendenteBubble){		
-		//ordenando descendentemente
-		insertion_sort(arrayOrdenadoDescendenteInsertion,size,menor);
-		insertion_sort(arrayOrdenadoDescendenteBubble,size,menor);
-		
-		std::cout<<"\nARRAYS DESORDENADOS\n";		
-		long* arrayOrdenadoAscendenteInsertion = insertion_sort(arrayDesordenadoInsertion, size, mayor);
-		long* arrayOrdenadoAscendenteBubble = bubble_sort(arrayDesordenadoBubble, size, mayor);
-		
-		std::cout<<"\nARRAYS ORDENADOS ASCENDENTEMENTE\n";
-		insertion_sort(arrayOrdenadoAscendenteInsertion, size, mayor);
-		bubble_sort(arrayOrdenadoAscendenteBubble, size, mayor);
+			long* arrayOrdenadoAscendenteInsertion = insertion_sort(arrayDesordenadoInsertion, size);
+			long* arrayOrdenadoAscendenteBubble = bubble_sort(arrayDesordenadoBubble, size);
+
+			//Array ordenados de manera ascendente por las dos acciones anteriores
+	//		mostrar_array(arrayOrdenadoAscendenteInsertion,size);
+	//		mostrar_array(arrayOrdenadoAscendenteBubble,size);
+
+			insertion_sort(arrayOrdenadoAscendenteInsertion, size);
+			bubble_sort(arrayOrdenadoAscendenteBubble, size);
 			
-		std::cout<<"\nARRAYS ORDENADOS DESCENDENTEMENTE\n";
-		insertion_sort(arrayOrdenadoDescendenteInsertion, size, mayor);
-		bubble_sort(arrayOrdenadoDescendenteBubble, size, mayor);
-		
+	//		mostrar_array(arrayOrdenadoAscendenteInsertion,size);
+	//		mostrar_array(arrayOrdenadoAscendenteBubble,size);
+
+			insertion_sort(arrayOrdenadoDescendenteInsertion, size);
+			bubble_sort(arrayOrdenadoDescendenteBubble, size);
+			
+	//		mostrar_array(arrayOrdenadoDescendenteInsertion,size);
+	//		mostrar_array(arrayOrdenadoDescendenteBubble,size);
 	}
 	else
 		std::cout<<"error en la creacion de arrays";
@@ -67,6 +72,9 @@ int main(){
 	delete[] arrayDesordenadoBubble;
 	delete[] arrayOrdenadoDescendenteInsertion;
 	delete[] arrayOrdenadoDescendenteBubble;
+		
+
+
 }
 
 long* generate_array(const int size){
@@ -80,61 +88,34 @@ long* generate_array(const int size){
 	return array;
 }
 
-long* insertion_sort( long*& array, const int size, bool (*compare)(void)){
+long* insertion_sort( long*& array, const int size){
 	std::chrono::steady_clock::time_point inicio_ordenamiento_insertion = std::chrono::steady_clock::now();//c++11 time
 	int i, j;//no i,j,temp, as en i
 	long temp;
-	if(compare()){
-		for(i=1;i< size; ++i){//as,co
-			temp = array[i];//as
-			j = i-1;//as
-			while(j>=0 && array[j] > temp){
-				array[j+1] = array[j];//as
-				--j;//as j=j-1
-			}
-			array[j+1] = temp;//as
+	for(i=1;i< size; ++i){//as,co
+		temp = array[i];//as
+		j = i-1;//as
+		while(j>=0 && array[j] > temp){
+			array[j+1] = array[j];//as
+			--j;//as j=j-1
 		}
-	}	
-	else{
-		for(i=1;i< size; ++i){//as,co
-			temp = array[i];//as
-			j = i-1;//as
-			while(j>=0 && array[j] < temp){
-				array[j+1] = array[j];//as
-				--j;//as j=j-1
-			}
-			array[j+1] = temp;//as
-		}	
+		array[j+1] = temp;//as
 	}
 	std::chrono::steady_clock::time_point fin_ordenamiento_insertion = std::chrono::steady_clock::now();//c++11 time
 	std::cout<<"INSERTION SORT\n";
 	std::cout<<"Tiempo de insert sort: "<< std::chrono::duration_cast<std::chrono::microseconds>(fin_ordenamiento_insertion - inicio_ordenamiento_insertion).count()/1000000.0<<" segundos" <<std::endl<<"Comparaciones realizadas: "<< cantidad_comparaciones_insert<<std::endl<<"Asignaciones realizadas: "<<cantidad_asignaciones_insert<<std::endl<<std::endl;
 	return array;
 }
-long* bubble_sort(long*& array, const int size,bool(*compare)(void)){
+long* bubble_sort(long*& array, const int size){
 	std::chrono::steady_clock::time_point inicio_ordenamiento_bubble = std::chrono::steady_clock::now();//c++11 time
-	int i, j;//no
-	if(compare()){
-		for(i=0;i< size-1;++i){//as,co
-			for(j=0; j< size-i-1; ++j){
-				if(array[j] > array[j+1]){
-					long temp = array[j];//no,as
-					array[j] = array[j+1];//as
-					array[j+1] = temp;//as
-				}	
-			}		
-		}
-	}
-	else{
-		for(i=0;i< size-1;++i){//as,co
-			for(j=0; j< size-i-1; ++j){
-				if(array[j] < array[j+1]){
-					long temp = array[j];//no,as
-					array[j] = array[j+1];//as
-					array[j+1] = temp;//as
-				}	
-			}		
-		}	
+	for(int i=0;i< size-1;++i){//as,co
+		for(int j=0; j< size-i-1; ++j){
+			if(array[j] > array[j+1]){
+				long temp = array[j];//no,as
+				array[j] = array[j+1];//as
+				array[j+1] = temp;//as
+			}	
+		}		
 	}
 	std::chrono::steady_clock::time_point fin_ordenamiento_bubble = std::chrono::steady_clock::now();
 	std::cout<<"BUBBLE SORT\n";
@@ -147,9 +128,9 @@ void mostrar_array(long* array, const int size){
 	std::cout<<std::endl;
 }
 
-bool mayor(){
-	return true;
+bool mayor(long a, long b){
+	return a>=b?true:false;
 }
-bool menor(){
-	return false;
+bool menor(long a, long b){
+	return a<=b?true:false;
 }
