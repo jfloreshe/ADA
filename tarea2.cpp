@@ -1,14 +1,15 @@
-/*//////////////////////////////////////////////////////////
-Autor: Jefferson Miguel Flores Herrera					////
-Repositorio: https://github.com/jfloreshe/ADA.git		////
-branch: master  										////
-Curso: Analisis y Diseno de Algoritmos Laboratorio A	////
-														////
-TAREA 2: Analisis de insertion y bubble sort, en tiempo ////
-real costo retornado por el analisis con elementos 		////
-ordenados crecientemente, ordenados decrecientemente 	////
-y desordenados 											////
-///////////////////////////////////////////////////////// */
+/*/////////////////////////////////////////////////////////////////////////
+Autor: Jefferson Miguel Flores Herrera									///
+Repositorio: https://github.com/jfloreshe/ADA/blob/master/tarea2.cpp	///
+https://github.com/jfloreshe/ADA/blob/master/tarea2b.cpp-analisis		///
+branch: master  														///
+Curso: Analisis y Diseno de Algoritmos Laboratorio A					///
+																		///
+TAREA 2: Analisis de insertion y bubble sort, en tiempo 				///
+real costo retornado por el analisis con elementos 						///
+ordenados crecientemente, ordenados decrecientemente 					///
+y desordenados 															///
+//////////////////////////////////////////////////////////////////////// */
 #include <iostream>
 #include <climits>
 #include <stdlib.h>
