@@ -1,2 +1,0 @@
-# ADA
-homework y otros
