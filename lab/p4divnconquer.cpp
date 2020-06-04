@@ -2,7 +2,7 @@
 Practica 4 - ADA Laboratorio A
 Codigo Divide y venceras
 Alumno: Jefferson Flores Herrera
-git: https://github.com/jfloreshe/ADA/
+git: https://github.com/jfloreshe/ADA/tree/master/lab
 */
 #include<stdio.h>
 int max(int a, int b){return a>=b?a:b;}

@@ -2,6 +2,7 @@
 Practica 4 - ADA Laboratorio A
 Codigo Lineal
 Alumno: Jefferson Flores Herrera
+git: https://github.com/jfloreshe/ADA/tree/master/lab
 */
 #include <stdio.h>
 int seg_max_lin(int* A,const int n,int& e,int& d){
