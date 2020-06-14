@@ -13,7 +13,7 @@ Curso: Analisis y Diseno de Algoritmos Laboratorio A
 #include <chrono>
 #include <stdlib.h>
 #include <vector>
-#define INF 100
+#define INF 1000000
 
 void merge_sort(long*& array, const int indiceP,const int indiceR);
 void intercala(long*& array, const int indiceP,const int indiceQ, const int indiceR);
@@ -30,15 +30,15 @@ int compare2(const void*a, const void*b){return (*(int*)b - *(int*)a);}
 ////////////MAIN//////////////
 int main(){
 	srand (time(NULL));
-    const int size = 100;
+    const int size = 1000000;
 	//TODO generate de times and stuff
 	long *arrayMS = generate_array(size);
 	long *arrayQS = nullptr;
 	copy_array<long>(arrayMS,arrayQS,size);
 	//mostrar_array(arrayMS, size);
 	
-	qsort(arrayMS,size,sizeof(long),compare2);
-	mostrar_array(arrayMS, size);
+	qsort(arrayMS,size,sizeof(long),compare);
+	//mostrar_array(arrayMS, size);
 	std::chrono::steady_clock::time_point inicioMS = std::chrono::steady_clock::now();
 
 	merge_sort(arrayMS,0,size-1);
@@ -46,20 +46,20 @@ int main(){
 	std::chrono::steady_clock::time_point finMS = std::chrono::steady_clock::now();
 	auto timeMS = std::chrono::duration_cast<std::chrono::microseconds>( finMS - inicioMS).count()/1000000.0;
 
-	mostrar_array(arrayMS, size);
+	//mostrar_array(arrayMS, size);
 
 	//mostrar_array(arrayMS, size);	
 	//mostrar_array(arrayQS, size);
 	
-	qsort(arrayQS,size,sizeof(long),compare2);
-	mostrar_array(arrayQS, size);
+	qsort(arrayQS,size,sizeof(long),compare);
+	//mostrar_array(arrayQS, size);
 	std::chrono::steady_clock::time_point inicioQS = std::chrono::steady_clock::now();
 
 	qsort(arrayQS,size,sizeof(long),compare);
 	
 	std::chrono::steady_clock::time_point finQS = std::chrono::steady_clock::now();
 	auto timeQS = std::chrono::duration_cast<std::chrono::microseconds>( finQS - inicioQS).count()/1000000.0;
-	mostrar_array(arrayQS, size);
+	//mostrar_array(arrayQS, size);
 	
 	std::cout<<"MS time: "<< timeMS<<" QS time: "<<timeQS<<"\n";
 	//mostrar_array(arrayQS, size);
