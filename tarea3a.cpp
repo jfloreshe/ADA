@@ -18,7 +18,7 @@ Tarea 3b:Se implemento generar_txt_merge_intercala LINEA 237 para resolver este 
 #include <utility>
 #include <vector>
 
-#define INF 50000
+#define INF 1000000
 int asignaciones_merge = 0;
 int asignaciones_intercala = 0;
 
