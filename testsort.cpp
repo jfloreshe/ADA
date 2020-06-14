@@ -13,6 +13,7 @@ Curso: Analisis y Diseno de Algoritmos Laboratorio A
 #include <chrono>
 #include <stdlib.h>
 #include <vector>
+#include <fstream>
 #define INF 1000000
 
 void merge_sort(long*& array, const int indiceP,const int indiceR);
@@ -26,47 +27,78 @@ T* copy_array(T*& arrayA, T*& arrayB, int size);
 /////////QSORT from stdlib//////////
 int compare(const void*a, const void*b){return (*(int*)a - *(int*)b);}
 int compare2(const void*a, const void*b){return (*(int*)b - *(int*)a);}
-
+////////Graph generator util////////
+bool generar_txt_tiempos(std::ofstream&);
 ////////////MAIN//////////////
 int main(){
 	srand (time(NULL));
-    const int size = 1000000;
-	//TODO generate de times and stuff
-	long *arrayMS = generate_array(size);
-	long *arrayQS = nullptr;
-	copy_array<long>(arrayMS,arrayQS,size);
-	//mostrar_array(arrayMS, size);
-	
-	qsort(arrayMS,size,sizeof(long),compare);
-	//mostrar_array(arrayMS, size);
-	std::chrono::steady_clock::time_point inicioMS = std::chrono::steady_clock::now();
-
-	merge_sort(arrayMS,0,size-1);
-	
-	std::chrono::steady_clock::time_point finMS = std::chrono::steady_clock::now();
-	auto timeMS = std::chrono::duration_cast<std::chrono::microseconds>( finMS - inicioMS).count()/1000000.0;
-
-	//mostrar_array(arrayMS, size);
-
-	//mostrar_array(arrayMS, size);	
-	//mostrar_array(arrayQS, size);
-	
-	qsort(arrayQS,size,sizeof(long),compare);
-	//mostrar_array(arrayQS, size);
-	std::chrono::steady_clock::time_point inicioQS = std::chrono::steady_clock::now();
-
-	qsort(arrayQS,size,sizeof(long),compare);
-	
-	std::chrono::steady_clock::time_point finQS = std::chrono::steady_clock::now();
-	auto timeQS = std::chrono::duration_cast<std::chrono::microseconds>( finQS - inicioQS).count()/1000000.0;
-	//mostrar_array(arrayQS, size);
-	
-	std::cout<<"MS time: "<< timeMS<<" QS time: "<<timeQS<<"\n";
-	//mostrar_array(arrayQS, size);
-	delete []arrayMS;
-	delete []arrayQS;
+	std::ofstream xls{"QSMS.txt"};
+	generar_txt_tiempos(xls);
+	xls.close();
 }
+bool generar_txt_tiempos(std::ofstream& xls){
+	int mejor = 0, igual = 0,i = 1;
+	int sizeEstatico = 1000;
+	long* arrayQS = nullptr;
+	long* arrayMS = nullptr;
+	long* arrayTemp = nullptr;
+	xls << "Tamanho\t"<<"MS\t"<<"QS\n";
+		
+	for(int size = sizeEstatico; size <=500000; i++,size=sizeEstatico*i){
+//	for(int size = 1; size <=1000; size++){
+		arrayQS = generate_array(size);
+		//ordenar array en este espacio para otra comparacion
+		if(!copy_array<long>(arrayQS, arrayMS, size) || !copy_array<long>(arrayQS,arrayTemp, size) ){
+			std::cout<<"Fallo al crear el segundo array ... "<<size <<" elementos ... finalizando\n";
+			delete[] arrayQS;
+			delete[] arrayMS;
+			delete[] arrayTemp;
+			arrayQS= nullptr;
+			arrayMS= nullptr;
+			arrayTemp= nullptr;
+			return false;
+		}
 
+
+		std::chrono::steady_clock::time_point inicioMS = std::chrono::steady_clock::now();
+
+		merge_sort(arrayMS,0,size-1);
+		
+		std::chrono::steady_clock::time_point finMS = std::chrono::steady_clock::now();
+		auto timeMS = std::chrono::duration_cast<std::chrono::microseconds>( finMS - inicioMS).count()/1000000.0;
+		
+		xls << size << '\t' << timeMS<< '\t';
+
+		std::chrono::steady_clock::time_point inicioQS = std::chrono::steady_clock::now();
+
+		qsort(arrayQS,size,sizeof(long),compare);
+			
+		std::chrono::steady_clock::time_point finQS = std::chrono::steady_clock::now();
+		auto timeQS = std::chrono::duration_cast<std::chrono::microseconds>( finQS - inicioQS).count()/1000000.0;
+
+		xls << timeQS << '\n';
+		if(timeQS > timeMS){
+			std::cout<<"Time MS es mejor en tamanho: "<<size<<std::endl;		
+			mostrar_array(arrayTemp,size);
+			mejor++;
+		}
+		else if(timeQS == timeMS){
+	//		std::cout<<"Time MS es igual en tamanho: "<<size<<std::endl;
+			igual++;
+		}
+		
+		delete[] arrayQS;
+		delete[] arrayMS;
+		delete[] arrayTemp;
+		arrayQS = nullptr;
+		arrayMS= nullptr;
+		arrayTemp= nullptr;
+	}
+
+	std::cout<<"total veces que MS es mejor: "<<mejor<<"\ntotal veces que MS es igual: "<<igual<<"\ntotal veces que MS es peor: "<<i - mejor - igual<<std::endl;
+	return true;
+
+}
 void intercala(long*& array, const int indiceP, const int indiceQ, const int indiceR){
 	// tamano r - p + 1
 	const int sizeB = indiceR - indiceP + 1;
