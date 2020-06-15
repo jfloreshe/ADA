@@ -1,9 +1,9 @@
 /*
 Autor: Jefferson Miguel Flores Herrera								
-Repositorio: https://github.com/jfloreshe/ADA/blob/master/practica5.cpp
-https://github.com/jfloreshe/ADA/blob/master/	
-branch: master  													
+Repositorio: https://github.com/jfloreshe/ADA/tree/master/practica5							
 Curso: Analisis y Diseno de Algoritmos Laboratorio A
+Tema: Mergesort y quicksort
+Tarea: Practica #5
 */
 
 #include <stdio.h>
