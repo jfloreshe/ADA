@@ -99,7 +99,8 @@ int main(){
 			//despues de eliminar k elementos se calcula el punto medio
 			maxValue(array,0,pos-1,posMax,mediumValue);
 		}
-		cout<<mediumValue<<endl;
+		printf("%ld\n",mediumValue);
+//		cout<<mediumValue<<endl;
 	}
 	return 0;
 }
